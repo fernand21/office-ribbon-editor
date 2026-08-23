@@ -1,6 +1,19 @@
 # Office Ribbon Editor website
 
-Official free-distribution website for Office Ribbon Editor. The application is proprietary software: it is free to download and use, but its source code is not published. The site is prepared locally and is not yet published.
+Official free-distribution website for Office Ribbon Editor. The application is proprietary software: it is free to download and use, but its source code is not published. The current public release is **v2.2**.
+
+Website: https://fernand21.github.io/office-ribbon-editor/
+
+## Office Ribbon Editor v2.2
+
+- Improved `.dotm` packaging and VBA project locking for Word add-ins.
+- Improved `.ppam` creation, editing, callbacks, module reading, obfuscation, and installer packaging for PowerPoint add-ins.
+- Obfuscation is applied only to an installer copy; the original add-in is never modified.
+- PowerPoint verifies that protected VBA was replaced before compiling an installer.
+- Pure-VBA license validation and packaging changes reduce antivirus false positives.
+- Stable per-add-in AppId values and explicit copying of custom installer icons.
+- Expanded Monaco autocomplete and five additional editor themes.
+- Host-aware title-bar colors for Excel, Word, PowerPoint, and the neutral workspace.
 
 ## Site structure
 
@@ -29,4 +42,4 @@ npm run dev
 npm run build
 ```
 
-The project uses vinext and retains the Sites hosting configuration, but no deployment has been performed.
+The project uses vinext and is published automatically through GitHub Pages.

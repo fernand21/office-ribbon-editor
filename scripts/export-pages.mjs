@@ -8,6 +8,13 @@ await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await cp(path.join(root, "dist", "client"), output, { recursive: true });
 
+// vinext places generated assets inside the configured basePath directory.
+// GitHub Pages already mounts this artifact at /office-ribbon-editor, so merge
+// that directory into the artifact root to avoid duplicating the base path.
+const nestedBasePath = path.join(output, "office-ribbon-editor");
+await cp(nestedBasePath, output, { recursive: true, force: true });
+await rm(nestedBasePath, { recursive: true, force: true });
+
 const workerUrl = pathToFileURL(path.join(root, "dist", "server", "index.js"));
 workerUrl.searchParams.set("pages", Date.now().toString());
 const { default: worker } = await import(workerUrl.href);

@@ -83,7 +83,7 @@ export default function Home() {
       <figure className="hero-product-shot"><img src={`${siteBase}/screenshots/editor-workspace-clean.png`} alt={t.captions[0]} /><figcaption><span>v1.0.0</span>{t.captions[0]}</figcaption></figure>
     </section>
 
-    <section className="trust-strip"><span>{t.madeFor}</span><b>Excel</b><b>Word</b><b>PowerPoint</b><b>Access</b><b>Office Open XML</b></section>
+    <section className="trust-strip"><span>{t.madeFor}</span><b>Excel</b><b>Word</b><b>PowerPoint</b><b>Office Open XML</b></section>
 
     <section className="section" id="download"><div className="section-heading"><p className="eyebrow">{t.get}</p><h2>{t.choose}</h2><p>{t.packageCopy}</p></div><div className="download-grid">
       <article className="download-card featured"><div className="card-top"><span>{t.recommended}</span><small>v1.0.0</small></div><h3>{t.installer}</h3><p>{t.installerCopy}</p><ul><li>OfficeRibbonEditor_Setup.exe</li><li>86.87 MB</li><li>Windows</li></ul><a href={latestRelease} target="_blank" rel="noreferrer">{t.openRelease}<span>↗</span></a></article>

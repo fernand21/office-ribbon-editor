@@ -9,10 +9,7 @@ const features = [
 ];
 
 const releases = [
-  ["2.0", "Current generation", "Modernized runtime, refreshed editor experience, and actively published builds."],
-  ["1.9", ".NET Framework edition", "The final release line for environments that still require .NET Framework."],
-  ["1.8–1.7", "Previous releases", "Earlier stable milestones remain available for compatibility and reference."],
-  ["1.6 and earlier", "Archive", "Historical packages and notes are preserved on GitHub Releases."],
+  ["1.0.0", "First public release", "The initial official release includes a Windows installer and a portable ZIP package."],
 ];
 
 function GithubMark() {
@@ -64,9 +61,9 @@ export default function Home() {
       <section className="section" id="download">
         <div className="section-heading"><p className="eyebrow">Get the editor</p><h2>Choose the build that fits.</h2><p>Official packages are hosted on GitHub Releases with a clear, versioned download history.</p></div>
         <div className="download-grid">
-          <article className="download-card featured"><div className="card-top"><span>Recommended</span><small>Current</small></div><h3>Self-contained installer</h3><p>The simplest setup for most Windows users. Includes the required runtime and adds the editor to your installed apps.</p><ul><li>Windows x64</li><li>Installer package</li><li>No separate runtime needed</li></ul><a href={latestRelease} target="_blank" rel="noreferrer">Open latest release <span>↗</span></a></article>
-          <article className="download-card"><div className="card-icon">ZIP</div><h3>Portable binaries</h3><p>Extract and run without installation. Useful for restricted machines, USB toolkits, or side-by-side versions.</p><ul><li>Windows x64 and x86</li><li>Portable ZIP archive</li><li>No Start menu entry</li></ul><a href={latestRelease} target="_blank" rel="noreferrer">View release assets <span>↗</span></a></article>
-          <article className="download-card muted"><div className="card-icon">1.9</div><h3>.NET Framework edition</h3><p>For older Windows environments that cannot use the 2.0 runtime. Version 1.9 is the final Framework release.</p><ul><li>Legacy compatibility</li><li>Stable 1.9 release line</li><li>Archived on GitHub</li></ul><a href={allReleases} target="_blank" rel="noreferrer">Browse older releases <span>↗</span></a></article>
+          <article className="download-card featured"><div className="card-top"><span>Recommended</span><small>v1.0.0</small></div><h3>Windows installer</h3><p>The simplest setup for most Windows users. Includes the required runtime and adds the editor to your installed apps.</p><ul><li>Guided installation</li><li>Required runtime included</li><li>No separate setup needed</li></ul><a href={latestRelease} target="_blank" rel="noreferrer">Open latest release <span>↗</span></a></article>
+          <article className="download-card"><div className="card-icon">ZIP</div><h3>Portable package</h3><p>Extract and run without installation. Useful for restricted machines, USB toolkits, or keeping the application in a project folder.</p><ul><li>Portable ZIP archive</li><li>Required runtime included</li><li>No Start menu entry</li></ul><a href={latestRelease} target="_blank" rel="noreferrer">View release assets <span>↗</span></a></article>
+          <article className="download-card muted"><div className="card-icon">HELP</div><h3>Questions or problems?</h3><p>Use the official issue tracker if you encounter a reproducible problem while installing or editing an Office file.</p><ul><li>Search known issues</li><li>Report reproducible bugs</li><li>Follow future releases</li></ul><a href={`${repository}/issues`} target="_blank" rel="noreferrer">Open issue tracker <span>↗</span></a></article>
         </div>
         <p className="download-note"><strong>Before you install:</strong> Close any open Office documents and keep a backup of files before editing their custom UI.</p>
       </section>

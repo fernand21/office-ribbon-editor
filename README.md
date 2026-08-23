@@ -8,7 +8,7 @@ Official free-distribution website for Office Ribbon Editor. The application is 
 - Downloads: installer, portable binaries, and legacy .NET Framework edition
 - Documentation: four-step quick start plus project and issue links
 - Screenshots: interface-oriented product previews and key capabilities
-- Version history: current, legacy, and archive release lines
+- Version history: official published releases
 - Future licensing: reserved section for optional commercial or enterprise offers
 
 All distribution links point to the canonical GitHub repository at `fernand21/office-ribbon-editor`.

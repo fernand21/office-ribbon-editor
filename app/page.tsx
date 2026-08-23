@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 const latestRelease = "https://github.com/fernand21/office-ribbon-editor/releases/latest";
 const allReleases = "https://github.com/fernand21/office-ribbon-editor/releases";
 const repository = "https://github.com/fernand21/office-ribbon-editor";
+const siteBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const languages = [
   ["en", "English"], ["es", "Español"], ["pt", "Português"], ["fr", "Français"], ["de", "Deutsch"],
@@ -79,7 +80,7 @@ export default function Home() {
 
     <section className="hero" id="top">
       <div className="hero-copy"><p className="eyebrow"><span />{t.free}</p><h1>{t.title}</h1><p className="hero-lede">{t.lede}</p><div className="hero-actions"><a className="button button-primary" href={latestRelease} target="_blank" rel="noreferrer">{t.download} <span>↓</span></a><a className="button button-secondary" href="#docs">{t.quick} <span>→</span></a></div><p className="fine-print">{t.distributed}</p></div>
-      <figure className="hero-product-shot"><img src="/screenshots/editor-workspace-clean.png" alt={t.captions[0]} /><figcaption><span>v1.0.0</span>{t.captions[0]}</figcaption></figure>
+      <figure className="hero-product-shot"><img src={`${siteBase}/screenshots/editor-workspace-clean.png`} alt={t.captions[0]} /><figcaption><span>v1.0.0</span>{t.captions[0]}</figcaption></figure>
     </section>
 
     <section className="trust-strip"><span>{t.madeFor}</span><b>Excel</b><b>Word</b><b>PowerPoint</b><b>Access</b><b>Office Open XML</b></section>
@@ -92,7 +93,7 @@ export default function Home() {
 
     <section className="dark-section" id="docs"><div className="section-heading"><p className="eyebrow">{t.docs}</p><h2>{t.docsTitle}</h2></div><ol className="steps">{t.steps.map(([title,body],i)=><li key={title}><span>0{i+1}</span><div><h3>{title}</h3><p>{body}</p></div></li>)}</ol><div className="docs-links"><a href={`${repository}#readme`} target="_blank" rel="noreferrer"><strong>{t.guide}</strong><span>{t.guideCopy} →</span></a><a href={`${repository}/issues`} target="_blank" rel="noreferrer"><strong>{t.help}</strong><span>{t.helpCopy} →</span></a></div></section>
 
-    <section className="section screenshots" id="screenshots"><div className="section-heading"><p className="eyebrow">{t.inside}</p><h2>{t.insideTitle}</h2></div><div className="feature-list">{t.features.map(([title,body],i)=><article key={title}><span>0{i+1}</span><h3>{title}</h3><p>{body}</p></article>)}</div><div className="gallery-heading"><h3>{t.gallery}</h3><p>{t.galleryCopy}</p></div><div className="real-shot-grid">{shots.map((shot,i)=><figure className={`app-shot app-shot-${i}`} key={shot}><img src={`/screenshots/${shot}`} alt={t.captions[i]} loading={i ? "lazy" : "eager"}/><figcaption>{t.captions[i]}</figcaption></figure>)}</div></section>
+    <section className="section screenshots" id="screenshots"><div className="section-heading"><p className="eyebrow">{t.inside}</p><h2>{t.insideTitle}</h2></div><div className="feature-list">{t.features.map(([title,body],i)=><article key={title}><span>0{i+1}</span><h3>{title}</h3><p>{body}</p></article>)}</div><div className="gallery-heading"><h3>{t.gallery}</h3><p>{t.galleryCopy}</p></div><div className="real-shot-grid">{shots.map((shot,i)=><figure className={`app-shot app-shot-${i}`} key={shot}><img src={`${siteBase}/screenshots/${shot}`} alt={t.captions[i]} loading={i ? "lazy" : "eager"}/><figcaption>{t.captions[i]}</figcaption></figure>)}</div></section>
 
     <section className="advantages-section"><div className="advantages-intro"><p className="eyebrow">Office Ribbon Editor</p><h2>{x.advantage}</h2><p>{x.advantageBody}</p></div><div className="advantages-grid">{x.items.map((item,i)=><article key={item}><span>{String(i+1).padStart(2,"0")}</span><h3>{item}</h3></article>)}</div></section>
 

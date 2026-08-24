@@ -13,6 +13,7 @@ const languages = [
 ] as const;
 
 type Lang = (typeof languages)[number][0];
+type FeedbackIssue = { id:number; title:string; body:string | null; html_url:string; created_at:string; user:{ login:string } | null };
 type Copy = {
   nav: string[]; free: string; title: string; lede: string; download: string; quick: string; distributed: string;
   madeFor: string; get: string; choose: string; packageCopy: string; recommended: string; installer: string; installerCopy: string;
@@ -69,6 +70,8 @@ function Brand() { return <div className="brand"><span className="brand-glyph" a
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
+  const [feedback, setFeedback] = useState<FeedbackIssue[]>([]);
+  const [feedbackLoaded, setFeedbackLoaded] = useState(false);
   const t = copy[lang];
   const x = extra[lang];
   const c = community[lang];
@@ -80,6 +83,30 @@ export default function Home() {
     const supported = languages.some(([code]) => code === (saved ?? browserLang));
     if (supported) setLang((saved ?? browserLang) as Lang);
   }, []);
+
+  useEffect(() => {
+    fetch("https://api.github.com/repos/fernand21/office-ribbon-editor/issues?state=all&per_page=30", { headers:{ Accept:"application/vnd.github+json" } })
+      .then((response) => response.ok ? response.json() : [])
+      .then((issues: (FeedbackIssue & { pull_request?:unknown })[]) => setFeedback(issues.filter((issue) => !issue.pull_request && issue.title.toLowerCase().startsWith("feedback for office ribbon editor")).slice(0, 6)))
+      .catch(() => setFeedback([]))
+      .finally(() => setFeedbackLoaded(true));
+  }, []);
+
+  const manual = lang === "es" ? [
+    ["01", "Instalación y requisitos", ["Windows 10 u 11 y Microsoft Office de escritorio para trabajar con VBA y crear complementos.", "Instala el programa o utiliza el ZIP portátil. Cierra Excel, Word y PowerPoint antes de reemplazar archivos.", "Para crear instaladores .exe de complementos necesitas Inno Setup 6 instalado en Archivos de programa.", "Para leer o escribir módulos VBA, activa en Office: Confiar en el acceso al modelo de objetos de proyectos VBA."]],
+    ["02", "Archivos compatibles", ["Excel: .xlsx, .xlsm, .xltx, .xltm y complementos .xlam.", "Word: .docx, .docm, .dotx y complementos .dotm.", "PowerPoint: .pptx, .pptm, .potx, .potm, .ppsx, .ppsm y complementos .ppam.", "El empaquetador de instaladores admite específicamente .xlam, .dotm y .ppam."]],
+    ["03", "Crear y editar RibbonX", ["Abre un archivo existente o crea un complemento nuevo para Office 2007 o para Office 2010+.", "Usa plantillas de pestaña básica, menú dinámico, galería, herramientas de Excel, licencia, Word o PowerPoint.", "El asistente inserta controles RibbonX; Monaco ofrece autocompletado, formato y temas de edición.", "Guarda o usa Guardar como. Mantén siempre una copia de seguridad del documento original."]],
+    ["04", "Callbacks, iconos y diagnóstico", ["Genera automáticamente las firmas VBA que exige cada atributo del XML y completa callbacks faltantes.", "Explora imageMso, busca por categoría, descarga iconos nativos o incorpora imágenes PNG personalizadas.", "La vista previa simula Excel, Word o PowerPoint sin abrir Office.", "Diagnóstico revisa sintaxis XML, IDs duplicados, callbacks ausentes e imágenes incrustadas; Validar XML comprueba la estructura."]],
+    ["05", "Crear complementos", ["Nuevo complemento crea .xlam para Excel, .dotm para Word o .ppam para PowerPoint con esquema clásico o moderno.", "El proyecto incluye un Ribbon inicial y un módulo RibbonCallbacks listo para ampliar.", "Puedes leer, crear, renombrar, editar y eliminar módulos VBA desde el árbol del proyecto.", "Los archivos sin macros deben guardarse primero en un formato habilitado para macros antes de generar callbacks."]],
+    ["06", "Empaquetar y proteger", ["Abre un .xlam, .dotm o .ppam, pulsa Empaquetar y define producto, versión, autor e icono .ico opcional.", "Cada proyecto conserva un AppId estable en su archivo .addininstaller para permitir actualizaciones correctas.", "La ofuscación es opcional y se aplica únicamente a una copia temporal: el complemento original nunca se modifica.", "En PowerPoint se verifica que el proyecto VBA protegido fue reemplazado; si falla, el instalador no se compila con código sin proteger."]]
+  ] : [
+    ["01", "Installation and requirements", ["Windows 10 or 11 and desktop Microsoft Office are required for VBA workflows and add-in creation.", "Install the application or use the portable ZIP. Close Office applications before replacing files.", "Inno Setup 6 is required to build .exe installers for add-ins.", "Enable Trust access to the VBA project object model in Office to read or write VBA modules."]],
+    ["02", "Supported files", ["Excel: .xlsx, .xlsm, .xltx, .xltm and .xlam add-ins.", "Word: .docx, .docm, .dotx and .dotm add-ins.", "PowerPoint: .pptx, .pptm, .potx, .potm, .ppsx, .ppsm and .ppam add-ins.", "Installer packaging specifically supports .xlam, .dotm and .ppam."]],
+    ["03", "Create and edit RibbonX", ["Open an existing file or create an Office 2007 or Office 2010+ add-in.", "Start from built-in templates or insert controls with the RibbonX wizard.", "Use Monaco autocomplete, formatting and editor themes.", "Save or Save As, and always keep a backup of the original document."]],
+    ["04", "Callbacks, icons and diagnostics", ["Generate required VBA signatures and missing callbacks automatically.", "Browse imageMso, download native icons or embed custom PNG images.", "Preview an Office-aware ribbon without opening Office.", "Diagnose XML syntax, duplicate IDs, missing callbacks and embedded images."]],
+    ["05", "Create add-ins", ["Create .xlam, .dotm or .ppam add-ins using classic or modern RibbonX.", "A starter Ribbon and RibbonCallbacks module are generated for you.", "Read, create, rename, edit and remove VBA modules from the project tree.", "Save regular documents as macro-enabled files before generating callbacks."]],
+    ["06", "Package and protect", ["Open a supported add-in, choose Package and enter product, version, author and optional .ico.", "A stable AppId is stored in .addininstaller for reliable upgrades.", "Optional obfuscation affects only a temporary installer copy; the original add-in stays untouched.", "PowerPoint verifies protected VBA replacement before compiling the installer."]]
+  ];
 
   function changeLanguage(value: Lang) {
     setLang(value);
@@ -107,7 +134,9 @@ export default function Home() {
       <article className="download-card muted"><div className="card-icon">?</div><h3>{t.help}</h3><p>{t.helpCopy}</p><ul><li>GitHub Issues</li><li>v2.2</li><li>Windows</li></ul><a href={`${repository}/issues`} target="_blank" rel="noreferrer">{t.issueTracker}<span>↗</span></a></article>
     </div><p className="download-note"><strong>{t.backup}</strong></p><aside className="inno-notice"><span aria-hidden="true">!</span><div><strong>{x.inno}</strong><p>{x.innoBody}</p><a href="https://jrsoftware.org/isinfo.php" target="_blank" rel="noreferrer">Inno Setup 6 ↗</a></div></aside></section>
 
-    <section className="dark-section" id="docs"><div className="section-heading"><p className="eyebrow">{t.docs}</p><h2>{t.docsTitle}</h2></div><ol className="steps">{t.steps.map(([title,body],i)=><li key={title}><span>0{i+1}</span><div><h3>{title}</h3><p>{body}</p></div></li>)}</ol><div className="docs-links"><a href={`${repository}#readme`} target="_blank" rel="noreferrer"><strong>{t.guide}</strong><span>{t.guideCopy} →</span></a><a href={`${repository}/issues`} target="_blank" rel="noreferrer"><strong>{t.help}</strong><span>{t.helpCopy} →</span></a></div></section>
+    <section className="dark-section" id="docs"><div className="section-heading"><p className="eyebrow">{t.docs}</p><h2>{t.docsTitle}</h2></div><ol className="steps">{t.steps.map(([title,body],i)=><li key={title}><span>0{i+1}</span><div><h3>{title}</h3><p>{body}</p></div></li>)}</ol><div className="docs-links"><a href="#manual"><strong>{lang === "es" ? "Manual completo" : "Complete manual"}</strong><span>{t.guideCopy} →</span></a><a href={`${repository}/issues`} target="_blank" rel="noreferrer"><strong>{t.help}</strong><span>{t.helpCopy} →</span></a></div></section>
+
+    <section className="manual-section" id="manual"><aside><p className="eyebrow">{lang === "es" ? "Documentación v2.2" : "v2.2 documentation"}</p><h2>{lang === "es" ? "Manual de principio a fin." : "The complete workflow."}</h2><p>{lang === "es" ? "Guía creada a partir de las funciones reales del programa para Excel, Word y PowerPoint." : "A guide based on the application’s real Excel, Word and PowerPoint workflows."}</p><a href="#download">{lang === "es" ? "Descargar v2.2" : "Download v2.2"} ↓</a></aside><div className="manual-chapters">{manual.map(([number,title,items])=><details key={String(number)} open={number === "01"}><summary><span>{String(number)}</span><h3>{String(title)}</h3><i>+</i></summary><ul>{(items as string[]).map((item)=><li key={item}>{item}</li>)}</ul></details>)}</div></section>
 
     <section className="section screenshots" id="screenshots"><div className="section-heading"><p className="eyebrow">{t.inside}</p><h2>{t.insideTitle}</h2></div><div className="feature-list">{t.features.map(([title,body],i)=><article key={title}><span>0{i+1}</span><h3>{title}</h3><p>{body}</p></article>)}</div><div className="gallery-heading"><h3>{t.gallery}</h3><p>{t.galleryCopy}</p></div><div className="real-shot-grid">{shots.map((shot,i)=><figure className={`app-shot app-shot-${i}`} key={shot}><img src={`${siteBase}/screenshots/${shot}`} alt={t.captions[i]} loading={i ? "lazy" : "eager"}/><figcaption>{t.captions[i]}</figcaption></figure>)}</div></section>
 
@@ -116,7 +145,7 @@ export default function Home() {
     <section className="section version-section" id="versions"><div className="section-heading"><p className="eyebrow">{t.history}</p><h2>{t.historyTitle}</h2><p>{t.historyCopy}</p></div><div className="timeline"><article className="current"><div><b>2.2</b><span>23 Aug 2026</span></div><p>{lang === "es" ? "Mejoras para Word y PowerPoint, protección VBA más segura, menos falsos positivos y nuevos temas del editor." : "Improved Word and PowerPoint packaging, safer VBA protection, fewer antivirus false positives, and new editor themes."}</p><i>{t.active}</i></article><article><div><b>1.0.0</b><span>23 Aug 2026</span></div><p>{t.firstRelease}</p></article></div><a className="button button-secondary release-button" href={allReleases} target="_blank" rel="noreferrer">{t.fullHistory}<span>↗</span></a></section>
 
     <section className="community-section" id="support">
-      <article className="feedback-card"><p className="eyebrow">Community</p><h2>{c.feedbackTitle}</h2><p>{c.feedbackBody}</p><div className="community-actions"><a className="button button-primary" href={feedbackUrl} target="_blank" rel="noreferrer">{c.feedbackButton}<span>↗</span></a><a className="text-link" href={`${repository}/issues`} target="_blank" rel="noreferrer">{c.viewFeedback} →</a></div></article>
+      <article className="feedback-card"><p className="eyebrow">Community</p><h2>{c.feedbackTitle}</h2><p>{c.feedbackBody}</p><div className="community-actions"><a className="button button-primary" href={feedbackUrl} target="_blank" rel="noreferrer">{c.feedbackButton}<span>↗</span></a><a className="text-link" href={`${repository}/issues`} target="_blank" rel="noreferrer">{c.viewFeedback} →</a></div><div className="feedback-feed" aria-live="polite">{feedback.length ? feedback.map((item)=><a href={item.html_url} target="_blank" rel="noreferrer" key={item.id}><div><b>{item.user?.login ?? "Office user"}</b><time>{new Date(item.created_at).toLocaleDateString(lang)}</time></div><p>{(item.body ?? "").replace(/Office host.*?:/gi, "").trim().slice(0, 210) || item.title}</p></a>) : <div className="feedback-empty"><b>{feedbackLoaded ? (lang === "es" ? "Aún no hay experiencias publicadas" : "No experiences published yet") : (lang === "es" ? "Cargando experiencias…" : "Loading experiences…")}</b><span>{lang === "es" ? "Sé la primera persona en compartir cómo utilizas el editor." : "Be the first to share how you use the editor."}</span></div>}</div></article>
       <article className="donation-card"><p className="eyebrow">PayPal · Ecuador</p><h2>{c.donateTitle}</h2><p>{c.donateBody}</p><div className="paypal-recipient"><span>PayPal.Me</span><strong>OfficeRibbon</strong></div><a className="paypal-button" href="https://www.paypal.com/paypalme/OfficeRibbon" target="_blank" rel="noreferrer"><span>Pay</span><b>Pal</b> · {lang === "es" ? "Enviar apoyo" : c.donateButton}</a><small>{lang === "es" ? "El enlace abre directamente el perfil OfficeRibbon. El usuario elige el importe y revisa los datos antes de confirmar. PayPal puede aplicar comisiones." : c.donateNote}</small></article>
     </section>
     <section className="license-section" id="license"><div><p className="eyebrow">{t.ahead}</p><h2>{t.licenseTitle}</h2></div><div><p>{t.licenseCopy}</p><span className="planned">{t.proprietary}</span></div></section>

@@ -92,6 +92,23 @@ export default function Home() {
       .finally(() => setFeedbackLoaded(true));
   }, []);
 
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const elements = Array.from(document.querySelectorAll<HTMLElement>("main > section:not(.hero):not(.trust-strip), main > footer"));
+    elements.forEach((element, index) => {
+      element.classList.add("reveal-item");
+      element.style.setProperty("--reveal-delay", `${Math.min(index % 3, 2) * 70}ms`);
+    });
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    }), { threshold:0.08, rootMargin:"0px 0px -45px" });
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+
   const manual = lang === "es" ? [
     ["01", "Instalación y requisitos", ["Windows 10 u 11 y Microsoft Office de escritorio para trabajar con VBA y crear complementos.", "Instala el programa o utiliza el ZIP portátil. Cierra Excel, Word y PowerPoint antes de reemplazar archivos.", "Para crear instaladores .exe de complementos necesitas Inno Setup 6 instalado en Archivos de programa.", "Para leer o escribir módulos VBA, activa en Office: Confiar en el acceso al modelo de objetos de proyectos VBA."]],
     ["02", "Archivos compatibles", ["Excel: .xlsx, .xlsm, .xltx, .xltm y complementos .xlam.", "Word: .docx, .docm, .dotx y complementos .dotm.", "PowerPoint: .pptx, .pptm, .potx, .potm, .ppsx, .ppsm y complementos .ppam.", "El empaquetador de instaladores admite específicamente .xlam, .dotm y .ppam."]],

@@ -1,0 +1,9 @@
+{
+  "name": "Office Ribbon Editor",
+  "short_name": "Ribbon Editor",
+  "description": "Create, preview, validate and package RibbonX customizations for Microsoft Office.",
+  "start_url": "/office-ribbon-editor/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0e66d4"
+}

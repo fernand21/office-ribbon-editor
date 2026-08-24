@@ -70,11 +70,17 @@ function Brand() { return <div className="brand"><span className="brand-glyph" a
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
+  const [selectedHost, setSelectedHost] = useState<"Excel" | "Word" | "PowerPoint">("Excel");
   const [feedback, setFeedback] = useState<FeedbackIssue[]>([]);
   const [feedbackLoaded, setFeedbackLoaded] = useState(false);
   const t = copy[lang];
   const x = extra[lang];
   const c = community[lang];
+  const hostData = {
+    Excel:{ extension:".xlam", color:"#217346", preview:"excel-preview-clean.png", use:lang === "es" ? "Complementos para hojas, automatización, informes y herramientas de datos." : "Add-ins for worksheets, automation, reports and data tools." },
+    Word:{ extension:".dotm", color:"#2b579a", preview:"word-preview-clean.png", use:lang === "es" ? "Plantillas y complementos para documentos, formularios y flujos editoriales." : "Templates and add-ins for documents, forms and editorial workflows." },
+    PowerPoint:{ extension:".ppam", color:"#d24726", preview:"powerpoint-preview-clean.png", use:lang === "es" ? "Complementos para presentaciones, acciones de diapositivas y contenido visual." : "Add-ins for presentations, slide actions and visual content." }
+  }[selectedHost];
   const feedbackUrl = `${repository}/issues/new?title=${encodeURIComponent("Feedback for Office Ribbon Editor v2.2")}&body=${encodeURIComponent("Office host (Excel, Word or PowerPoint):\n\nWhat worked well:\n\nWhat should be improved:\n\nWindows and Office version:")}`;
 
   useEffect(() => {
@@ -144,6 +150,8 @@ export default function Home() {
     </section>
 
     <section className="trust-strip"><span>{t.madeFor}</span><b>Excel</b><b>Word</b><b>PowerPoint</b><b>Office Open XML</b></section>
+
+    <section className="host-explorer" aria-labelledby="host-explorer-title"><div><p className="eyebrow">{lang === "es" ? "Explora el flujo" : "Explore the workflow"}</p><h2 id="host-explorer-title">{lang === "es" ? "¿Qué complemento quieres crear?" : "Which add-in do you want to create?"}</h2><div className="host-tabs" role="tablist" aria-label="Office host">{(["Excel","Word","PowerPoint"] as const).map((host)=><button key={host} role="tab" aria-selected={selectedHost === host} onClick={()=>setSelectedHost(host)} style={{"--host-color":({Excel:"#217346",Word:"#2b579a",PowerPoint:"#d24726"} as const)[host]} as React.CSSProperties}>{host}</button>)}</div><div className="host-result" style={{"--host-color":hostData.color} as React.CSSProperties}><span>{hostData.extension}</span><div><h3>{selectedHost} RibbonX</h3><p>{hostData.use}</p><a href="#manual">{lang === "es" ? "Ver documentación" : "View documentation"} →</a></div></div></div><figure><img src={`${siteBase}/screenshots/${hostData.preview}`} alt={`${selectedHost} RibbonX preview`}/><figcaption><i style={{background:hostData.color}}/>{selectedHost} · {hostData.extension}</figcaption></figure></section>
 
     <section className="section" id="download"><div className="section-heading"><p className="eyebrow">{t.get}</p><h2>{t.choose}</h2><p>{t.packageCopy}</p></div><div className="download-grid">
       <article className="download-card featured"><div className="card-top"><span>{t.recommended}</span><small>v2.2</small></div><h3>{t.installer}</h3><p>{t.installerCopy}</p><ul><li>OfficeRibbonEditor_Setup_v2.2.0.exe</li><li>86.89 MB</li><li>Windows</li></ul><a href={latestRelease} target="_blank" rel="noreferrer">{t.openRelease}<span>↗</span></a></article>

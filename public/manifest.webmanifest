@@ -1,7 +1,7 @@
 {
-  "name": "Office Ribbon Editor",
-  "short_name": "Ribbon Editor",
-  "description": "Create, preview, validate and package RibbonX customizations for Microsoft Office.",
+  "name": "Ribbon UI Studio",
+  "short_name": "Ribbon UI Studio",
+  "description": "Diseña y edita cintas personalizadas para Microsoft Office con RibbonX y VBA, y distribuye complementos mediante instaladores de Windows.",
   "start_url": "/office-ribbon-editor/",
   "display": "standalone",
   "background_color": "#ffffff",

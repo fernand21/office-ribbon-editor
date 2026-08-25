@@ -1,10 +1,10 @@
-# Office Ribbon Editor website
+# Ribbon UI Studio website
 
-Official free-distribution website for Office Ribbon Editor. The application is proprietary software: it is free to download and use, but its source code is not published. The current public release is **v2.2**.
+Official free-distribution website for Ribbon UI Studio. The application is proprietary software: it is free to download and use, but its source code is not published. The current public release is **v2.2**.
 
 Website: https://fernand21.github.io/office-ribbon-editor/
 
-## Office Ribbon Editor v2.2
+## Ribbon UI Studio v2.2
 
 - Improved `.dotm` packaging and VBA project locking for Word add-ins.
 - Improved `.ppam` creation, editing, callbacks, module reading, obfuscation, and installer packaging for PowerPoint add-ins.
@@ -28,7 +28,7 @@ All distribution links point to the canonical GitHub repository at `fernand21/of
 
 ## Software status
 
-The source code in this repository belongs to the distribution website. Publishing this website does not publish or grant rights to the Office Ribbon Editor application source code. Application binaries will be distributed separately through GitHub Releases.
+The source code in this repository belongs to the distribution website. Publishing this website does not publish or grant rights to the Ribbon UI Studio application source code. Application binaries will be distributed separately through GitHub Releases.
 
 ## Local development
 
@@ -43,3 +43,8 @@ npm run build
 ```
 
 The project uses vinext and is published automatically through GitHub Pages.
+
+
+## Branding transition
+
+The product is now branded **Ribbon UI Studio**. The GitHub repository slug and GitHub Pages path intentionally remain `office-ribbon-editor` for now so links already published in videos and descriptions continue to work.

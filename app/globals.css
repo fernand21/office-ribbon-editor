@@ -105,3 +105,19 @@ linear-gradient(135deg,rgba(255,255,255,.97),rgba(247,251,255,.95));box-shadow:0
   .host-pill{font-size:11px;padding-right:9px}
   .host-pill b{width:22px;height:22px}
 }
+
+/* Ribbon UI Studio brand refresh */
+.brand-glyph{position:relative;display:grid;place-items:center;overflow:hidden;background:linear-gradient(135deg,#0a66d9 0%,#16b8d4 42%,#5c2d91 76%,#7b61ff 100%);transform:none;border-radius:9px;padding:0;box-shadow:0 8px 24px rgba(46,93,190,.24)}
+.brand-glyph:before{content:"";position:absolute;left:-5px;right:-5px;top:7px;height:8px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,.22),rgba(255,255,255,.72),rgba(255,255,255,.14));transform:skewX(-24deg)}
+.brand-glyph b{position:relative;z-index:2;font:800 10px/1 var(--font-geist-mono);letter-spacing:-.05em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.24)}
+.studio-flow{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:-6px 0 26px;color:#4a6170;font-size:11px;font-weight:680}
+.studio-flow span{display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid #dce6ec;border-radius:10px;background:rgba(255,255,255,.84);box-shadow:0 7px 20px rgba(20,33,43,.045)}
+.studio-flow span b{display:grid;place-items:center;width:23px;height:23px;border-radius:7px;background:linear-gradient(135deg,#e9f3ff,#f3edff);color:#2f5da8;font:800 9px var(--font-geist-mono)}
+.studio-flow i{color:#91a5b0;font-style:normal;font-weight:800}
+.trust-strip b:last-child{color:#5c2d91;border-color:rgba(92,45,145,.20)}
+.download-card h3{letter-spacing:-.025em}
+.download-card.installer-card{background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%)}
+.download-card.portable-card{background:linear-gradient(180deg,#ffffff 0%,#fbf8ff 100%)}
+@media(max-width:600px){.studio-flow{gap:6px}.studio-flow i{display:none}.studio-flow span{flex:1 1 145px;justify-content:flex-start}}
+
+.former-name{font-weight:650;color:#617985}.former-name:before{content:""}

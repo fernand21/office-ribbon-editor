@@ -10,13 +10,13 @@ async function render() {
   }, { waitUntil() {}, passThroughOnException() {} });
 }
 
-test("server-renders the Office Ribbon Editor website", async () => {
+test("server-renders the Ribbon UI Studio website", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
-  assert.match(html, /Office Ribbon Editor/);
-  assert.match(html, /Design the Office ribbon/);
+  assert.match(html, /Ribbon UI Studio/);
+  assert.match(html, /Design RibbonX, VBA and Windows installers/);
   assert.match(html, /Download latest release/);
   assert.match(html, /Documentation/);
   assert.match(html, /Version history/);

@@ -14,6 +14,14 @@ const languages = [
 
 type Lang = (typeof languages)[number][0];
 type FeedbackIssue = { id:number; title:string; body:string | null; html_url:string; created_at:string; user:{ login:string } | null };
+type ReleaseAsset = { name:string; download_count:number; browser_download_url:string };
+type GitHubRelease = { draft:boolean; prerelease:boolean; tag_name:string; assets:ReleaseAsset[] };
+type DownloadStats = { total:number; installer:number; portable:number; loaded:boolean };
+
+const downloadsWord: Record<Lang, string> = {
+  en:"downloads", es:"descargas", pt:"downloads", fr:"téléchargements", de:"Downloads",
+  it:"download", ru:"скачиваний", zh:"次下载", ja:"ダウンロード", hi:"डाउनलोड",
+};
 type Copy = {
   nav: string[]; free: string; title: string; lede: string; download: string; quick: string; distributed: string;
   madeFor: string; get: string; choose: string; packageCopy: string; recommended: string; installer: string; installerCopy: string;
@@ -73,6 +81,7 @@ export default function Home() {
   const [selectedHost, setSelectedHost] = useState<"Excel" | "Word" | "PowerPoint">("Excel");
   const [feedback, setFeedback] = useState<FeedbackIssue[]>([]);
   const [feedbackLoaded, setFeedbackLoaded] = useState(false);
+  const [downloadStats, setDownloadStats] = useState<DownloadStats>({ total:0, installer:0, portable:0, loaded:false });
   const t = copy[lang];
   const x = extra[lang];
   const c = community[lang];
@@ -96,6 +105,28 @@ export default function Home() {
       .then((issues: (FeedbackIssue & { pull_request?:unknown })[]) => setFeedback(issues.filter((issue) => !issue.pull_request && issue.title.toLowerCase().startsWith("feedback for office ribbon editor")).slice(0, 6)))
       .catch(() => setFeedback([]))
       .finally(() => setFeedbackLoaded(true));
+  }, []);
+
+  useEffect(() => {
+    fetch("https://api.github.com/repos/fernand21/office-ribbon-editor/releases?per_page=100", { headers:{ Accept:"application/vnd.github+json" } })
+      .then((response) => response.ok ? response.json() : [])
+      .then((releases: GitHubRelease[]) => {
+        const published = releases.filter((release) => !release.draft);
+        const latest = published.find((release) => !release.prerelease) ?? published[0];
+        const installer = latest?.assets.find((asset) => /\.exe$/i.test(asset.name) && /(setup|installer)/i.test(asset.name))
+          ?? latest?.assets.find((asset) => /\.exe$/i.test(asset.name));
+        const portable = latest?.assets.find((asset) => /\.zip$/i.test(asset.name));
+        const total = published.reduce((releaseTotal, release) => releaseTotal + release.assets
+          .filter((asset) => /\.(exe|zip)$/i.test(asset.name))
+          .reduce((assetTotal, asset) => assetTotal + (asset.download_count || 0), 0), 0);
+        setDownloadStats({
+          total,
+          installer:installer?.download_count ?? 0,
+          portable:portable?.download_count ?? 0,
+          loaded:true,
+        });
+      })
+      .catch(() => setDownloadStats((current) => ({ ...current, loaded:false })));
   }, []);
 
   useEffect(() => {
@@ -137,6 +168,8 @@ export default function Home() {
     document.documentElement.lang = value;
   }
 
+  const formatDownloads = (value:number) => new Intl.NumberFormat(lang).format(value);
+
   return <main>
     <header className="site-header">
       <a href="#top" aria-label="Office Ribbon Editor"><Brand /></a>
@@ -145,7 +178,7 @@ export default function Home() {
     </header>
 
     <section className="hero" id="top">
-      <div className="hero-copy"><p className="eyebrow"><span />{t.free}</p><h1>{t.title}</h1><p className="hero-lede">{t.lede}</p><div className="hero-actions"><a className="button button-primary" href={latestRelease} target="_blank" rel="noreferrer">{t.download} <span>↓</span></a><a className="button button-secondary" href="#docs">{t.quick} <span>→</span></a></div><p className="fine-print">{t.distributed}</p></div>
+      <div className="hero-copy"><p className="eyebrow"><span />{t.free}</p><h1>{t.title}</h1><p className="hero-lede">{t.lede}</p><div className="hero-actions"><div className="download-action"><a className="button button-primary" href={latestRelease} target="_blank" rel="noreferrer">{t.download} <span>↓</span></a>{downloadStats.loaded && <span className="download-counter" title="GitHub Releases">↓ {formatDownloads(downloadStats.total)} {downloadsWord[lang]}</span>}</div><a className="button button-secondary" href="#docs">{t.quick} <span>→</span></a></div><p className="fine-print">{t.distributed}</p></div>
       <figure className="hero-product-shot"><img src={`${siteBase}/screenshots/editor-workspace-clean.png`} alt={t.captions[0]} /><figcaption><span>v2.2</span>{t.captions[0]}</figcaption></figure>
     </section>
 
@@ -154,8 +187,8 @@ export default function Home() {
     <section className="host-explorer" aria-labelledby="host-explorer-title"><div><p className="eyebrow">{lang === "es" ? "Explora el flujo" : "Explore the workflow"}</p><h2 id="host-explorer-title">{lang === "es" ? "¿Qué complemento quieres crear?" : "Which add-in do you want to create?"}</h2><div className="host-tabs" role="tablist" aria-label="Office host">{(["Excel","Word","PowerPoint"] as const).map((host)=><button key={host} role="tab" aria-selected={selectedHost === host} onClick={()=>setSelectedHost(host)} style={{"--host-color":({Excel:"#217346",Word:"#2b579a",PowerPoint:"#d24726"} as const)[host]} as React.CSSProperties}>{host}</button>)}</div><div className="host-result" style={{"--host-color":hostData.color} as React.CSSProperties}><span>{hostData.extension}</span><div><h3>{selectedHost} RibbonX</h3><p>{hostData.use}</p><a href="#manual">{lang === "es" ? "Ver documentación" : "View documentation"} →</a></div></div></div><figure><img src={`${siteBase}/screenshots/${hostData.preview}`} alt={`${selectedHost} RibbonX preview`}/><figcaption><i style={{background:hostData.color}}/>{selectedHost} · {hostData.extension}</figcaption></figure></section>
 
     <section className="section" id="download"><div className="section-heading"><p className="eyebrow">{t.get}</p><h2>{t.choose}</h2><p>{t.packageCopy}</p></div><div className="download-grid">
-      <article className="download-card featured"><div className="card-top"><span>{t.recommended}</span><small>v2.2</small></div><h3>{t.installer}</h3><p>{t.installerCopy}</p><ul><li>OfficeRibbonEditor_Setup_v2.2.0.exe</li><li>86.89 MB</li><li>Windows</li></ul><a href={latestRelease} target="_blank" rel="noreferrer">{t.openRelease}<span>↗</span></a></article>
-      <article className="download-card"><div className="card-icon">ZIP</div><h3>{t.portable}</h3><p>{t.portableCopy}</p><ul><li>OfficeRibbonEditor.zip</li><li>102.48 MB</li><li>Windows</li></ul><a href={latestRelease} target="_blank" rel="noreferrer">{t.openRelease}<span>↗</span></a></article>
+      <article className="download-card featured"><div className="card-top"><span>{t.recommended}</span><small>v2.2</small></div><h3>{t.installer}</h3><p>{t.installerCopy}</p><ul><li>OfficeRibbonEditor_Setup_v2.2.0.exe</li><li>86.89 MB</li><li>Windows</li></ul>{downloadStats.loaded && <div className="asset-download-count"><span aria-hidden="true">↓</span><strong>{formatDownloads(downloadStats.installer)}</strong> {downloadsWord[lang]}</div>}<a href={latestRelease} target="_blank" rel="noreferrer">{t.openRelease}<span>↗</span></a></article>
+      <article className="download-card"><div className="card-icon">ZIP</div><h3>{t.portable}</h3><p>{t.portableCopy}</p><ul><li>OfficeRibbonEditor.zip</li><li>102.48 MB</li><li>Windows</li></ul>{downloadStats.loaded && <div className="asset-download-count"><span aria-hidden="true">↓</span><strong>{formatDownloads(downloadStats.portable)}</strong> {downloadsWord[lang]}</div>}<a href={latestRelease} target="_blank" rel="noreferrer">{t.openRelease}<span>↗</span></a></article>
       <article className="download-card muted"><div className="card-icon">?</div><h3>{t.help}</h3><p>{t.helpCopy}</p><ul><li>GitHub Issues</li><li>v2.2</li><li>Windows</li></ul><a href={`${repository}/issues`} target="_blank" rel="noreferrer">{t.issueTracker}<span>↗</span></a></article>
     </div><p className="download-note"><strong>{t.backup}</strong></p><aside className="inno-notice"><span aria-hidden="true">!</span><div><strong>{x.inno}</strong><p>{x.innoBody}</p><a href="https://jrsoftware.org/isinfo.php" target="_blank" rel="noreferrer">Inno Setup 6 ↗</a></div></aside></section>
 

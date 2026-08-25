@@ -9,9 +9,9 @@ await mkdir(output, { recursive: true });
 await cp(path.join(root, "dist", "client"), output, { recursive: true });
 
 // vinext places generated assets inside the configured basePath directory.
-// GitHub Pages already mounts this artifact at /office-ribbon-editor, so merge
+// GitHub Pages already mounts this artifact at /ribbon-ui-studio, so merge
 // that directory into the artifact root to avoid duplicating the base path.
-const nestedBasePath = path.join(output, "office-ribbon-editor");
+const nestedBasePath = path.join(output, "ribbon-ui-studio");
 await cp(nestedBasePath, output, { recursive: true, force: true });
 await rm(nestedBasePath, { recursive: true, force: true });
 
@@ -19,7 +19,7 @@ const workerUrl = pathToFileURL(path.join(root, "dist", "server", "index.js"));
 workerUrl.searchParams.set("pages", Date.now().toString());
 const { default: worker } = await import(workerUrl.href);
 const response = await worker.fetch(
-  new Request("https://fernand21.github.io/office-ribbon-editor/", { headers: { accept: "text/html" } }),
+  new Request("https://fernand21.github.io/ribbon-ui-studio/", { headers: { accept: "text/html" } }),
   { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
   { waitUntil() {}, passThroughOnException() {} },
 );

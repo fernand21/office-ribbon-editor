@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-const latestRelease = "https://github.com/fernand21/office-ribbon-editor/releases/latest";
-const allReleases = "https://github.com/fernand21/office-ribbon-editor/releases";
-const repository = "https://github.com/fernand21/office-ribbon-editor";
+const latestRelease = "https://github.com/fernand21/ribbon-ui-studio/releases/latest";
+const allReleases = "https://github.com/fernand21/ribbon-ui-studio/releases";
+const repository = "https://github.com/fernand21/ribbon-ui-studio";
 const siteBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const languages = [
@@ -100,7 +100,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetch("https://api.github.com/repos/fernand21/office-ribbon-editor/issues?state=all&per_page=30", { headers:{ Accept:"application/vnd.github+json" } })
+    fetch("https://api.github.com/repos/fernand21/ribbon-ui-studio/issues?state=all&per_page=30", { headers:{ Accept:"application/vnd.github+json" } })
       .then((response) => response.ok ? response.json() : [])
       .then((issues: (FeedbackIssue & { pull_request?:unknown })[]) => setFeedback(issues.filter((issue) => !issue.pull_request && (issue.title.toLowerCase().startsWith("feedback for ribbon ui studio") || issue.title.toLowerCase().startsWith("feedback for office ribbon editor"))).slice(0, 6)))
       .catch(() => setFeedback([]))
@@ -108,7 +108,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetch("https://api.github.com/repos/fernand21/office-ribbon-editor/releases?per_page=100", { headers:{ Accept:"application/vnd.github+json" } })
+    fetch("https://api.github.com/repos/fernand21/ribbon-ui-studio/releases?per_page=100", { headers:{ Accept:"application/vnd.github+json" } })
       .then((response) => response.ok ? response.json() : [])
       .then((releases: GitHubRelease[]) => {
         const published = releases.filter((release) => !release.draft);
@@ -177,7 +177,7 @@ export default function Home() {
     </header>
 
     <section className="hero" id="top">
-      <div className="hero-copy"><p className="eyebrow"><span />{t.free}</p><h1>{t.title}</h1><p className="hero-lede">{t.lede}</p><div className="office-host-pills" aria-label="Supported Office hosts"><span className="host-pill excel"><b>E</b>Excel</span><span className="host-pill word"><b>W</b>Word</span><span className="host-pill powerpoint"><b>P</b>PowerPoint</span><span className="host-pill ribbon"><b>R</b>RibbonX + VBA</span></div><div className="studio-flow" aria-label={lang === "es" ? "Flujo de Ribbon UI Studio" : "Ribbon UI Studio workflow"}><span><b>01</b>{lang === "es" ? "Diseña RibbonX" : "Design RibbonX"}</span><i>→</i><span><b>02</b>{lang === "es" ? "Programa VBA" : "Build VBA"}</span><i>→</i><span><b>03</b>{lang === "es" ? "Crea instaladores" : "Package installers"}</span></div><div className="hero-actions"><div className="download-action"><a className="button button-primary" href={latestRelease} target="_blank" rel="noreferrer">{t.download} <span>↓</span></a>{downloadStats.loaded && <span className="download-counter" title="GitHub Releases">↓ {formatDownloads(downloadStats.total)} {downloadsWord[lang]}</span>}</div><a className="button button-secondary" href="#docs">{t.quick} <span>→</span></a></div><p className="fine-print">{t.distributed} <span className="former-name">· {lang === "es" ? "Antes: Office Ribbon Editor" : "Formerly: Office Ribbon Editor"}</span></p></div>
+      <div className="hero-copy"><p className="eyebrow"><span />{t.free}</p><h1>{t.title}</h1><p className="hero-lede">{t.lede}</p><div className="office-host-pills" aria-label="Supported Office hosts"><span className="host-pill excel"><b>E</b>Excel</span><span className="host-pill word"><b>W</b>Word</span><span className="host-pill powerpoint"><b>P</b>PowerPoint</span><span className="host-pill ribbon"><b>R</b>RibbonX + VBA</span></div><div className="studio-flow" aria-label={lang === "es" ? "Flujo de Ribbon UI Studio" : "Ribbon UI Studio workflow"}><span><b>01</b>{lang === "es" ? "Diseña RibbonX" : "Design RibbonX"}</span><i>→</i><span><b>02</b>{lang === "es" ? "Programa VBA" : "Build VBA"}</span><i>→</i><span><b>03</b>{lang === "es" ? "Crea instaladores" : "Package installers"}</span></div><div className="hero-actions"><div className="download-action"><a className="button button-primary" href={latestRelease} target="_blank" rel="noreferrer">{t.download} <span>↓</span></a>{downloadStats.loaded && <span className="download-counter" title="GitHub Releases">↓ {formatDownloads(downloadStats.total)} {downloadsWord[lang]}</span>}</div><a className="button button-secondary" href="#docs">{t.quick} <span>→</span></a></div><p className="fine-print">{t.distributed} <span className="former-name">· {lang === "es" ? "Antes: Ribbon UI Studio" : "Formerly: Ribbon UI Studio"}</span></p></div>
       <figure className="hero-product-shot"><img src={`${siteBase}/screenshots/editor-workspace-clean.png`} alt={t.captions[0]} /><figcaption><span>v2.2</span>{t.captions[0]}</figcaption></figure>
     </section>
 

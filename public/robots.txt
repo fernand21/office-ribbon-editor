@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fernand21.github.io/office-ribbon-editor/sitemap.xml
+Sitemap: https://fernand21.github.io/ribbon-ui-studio/sitemap.xml

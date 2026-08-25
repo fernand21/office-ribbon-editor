@@ -1,6 +1,6 @@
 # Contador de descargas
 
-Se agregó un contador público de descargas basado en la API de GitHub Releases del repositorio `fernand21/office-ribbon-editor`.
+Se agregó un contador público de descargas basado en la API de GitHub Releases del repositorio `fernand21/ribbon-ui-studio`.
 
 Cambios principales:
 - Total acumulado de descargas de assets `.exe` y `.zip` de releases publicadas.

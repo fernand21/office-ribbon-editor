@@ -1,8 +1,12 @@
+﻿# Ribbon UI Studio
+
+Dise├▒a y edita cintas personalizadas para Microsoft Office con RibbonX y VBA en una misma plataforma, y distribuye tus complementos mediante instaladores de Windows.
+
 # Ribbon UI Studio website
 
 Official free-distribution website for Ribbon UI Studio. The application is proprietary software: it is free to download and use, but its source code is not published. The current public release is **v2.2**.
 
-Website: https://fernand21.github.io/office-ribbon-editor/
+Website: https://fernand21.github.io/ribbon-ui-studio/
 
 ## Ribbon UI Studio v2.2
 
@@ -24,7 +28,7 @@ Website: https://fernand21.github.io/office-ribbon-editor/
 - Version history: official published releases
 - Future licensing: reserved section for optional commercial or enterprise offers
 
-All distribution links point to the canonical GitHub repository at `fernand21/office-ribbon-editor`.
+All distribution links point to the canonical GitHub repository at `fernand21/ribbon-ui-studio`.
 
 ## Software status
 
@@ -47,4 +51,5 @@ The project uses vinext and is published automatically through GitHub Pages.
 
 ## Branding transition
 
-The product is now branded **Ribbon UI Studio**. The GitHub repository slug and GitHub Pages path intentionally remain `office-ribbon-editor` for now so links already published in videos and descriptions continue to work.
+The product is now branded **Ribbon UI Studio**. The GitHub repository slug and GitHub Pages path intentionally remain `ribbon-ui-studio` for now so links already published in videos and descriptions continue to work.
+

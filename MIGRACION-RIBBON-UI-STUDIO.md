@@ -1,13 +1,15 @@
-# Migración a Ribbon UI Studio
+# Ribbon UI Studio URL migration
 
-Marca visible: **Ribbon UI Studio**
+Visible product name: **Ribbon UI Studio**
 
-Mensaje principal:
+Canonical website:
 
-> Diseña y edita cintas personalizadas para Microsoft Office con RibbonX y VBA en una misma plataforma. Crea complementos y distribúyelos mediante instaladores de Windows.
+`https://fernand21.github.io/ribbon-ui-studio/`
 
-## Por qué el slug del repositorio se mantiene por ahora
+Previous website path:
 
-El sitio actual está publicado como `https://fernand21.github.io/ribbon-ui-studio/` y ese enlace ya aparece en videos. GitHub indica que al renombrar un repositorio los URLs de GitHub Pages del sitio del proyecto son una excepción a sus redirecciones automáticas. Mantener temporalmente el slug evita romper esos enlaces.
+`https://fernand21.github.io/office-ribbon-editor/`
 
-El nombre visible, SEO, PWA, descargas mostradas y textos de producto sí cambian a Ribbon UI Studio.
+This is a path migration under the same `fernand21.github.io` host. The website source now uses the new path for its GitHub Pages base path, PWA manifest, sitemap, canonical metadata, and repository links.
+
+For Google Search Console, keep the old URL-prefix property temporarily, add the new URL-prefix property, submit the new sitemap, and request indexing for the new home page. The Search Console Change of Address tool is not required for a path-only move under the same host.

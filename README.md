@@ -1,38 +1,29 @@
-﻿# Ribbon UI Studio
+# Ribbon UI Studio
 
-Dise├▒a y edita cintas personalizadas para Microsoft Office con RibbonX y VBA en una misma plataforma, y distribuye tus complementos mediante instaladores de Windows.
+Design and edit custom Microsoft Office ribbons with RibbonX and VBA in one platform, then package add-ins with Windows installers.
 
-# Ribbon UI Studio website
+## Website
 
-Official free-distribution website for Ribbon UI Studio. The application is proprietary software: it is free to download and use, but its source code is not published. The current public release is **v2.2**.
+Official distribution website for Ribbon UI Studio. The application is proprietary software: it is free to download and use, while its application source code remains private.
 
 Website: https://fernand21.github.io/ribbon-ui-studio/
 
-## Ribbon UI Studio v2.2
-
-- Improved `.dotm` packaging and VBA project locking for Word add-ins.
-- Improved `.ppam` creation, editing, callbacks, module reading, obfuscation, and installer packaging for PowerPoint add-ins.
-- Obfuscation is applied only to an installer copy; the original add-in is never modified.
-- PowerPoint verifies that protected VBA was replaced before compiling an installer.
-- Pure-VBA license validation and packaging changes reduce antivirus false positives.
-- Stable per-add-in AppId values and explicit copying of custom installer icons.
-- Expanded Monaco autocomplete and five additional editor themes.
-- Host-aware title-bar colors for Excel, Word, PowerPoint, and the neutral workspace.
+The website reads the current public version, release date, asset names, asset sizes, download links, and download counters directly from GitHub Releases. Publishing a new GitHub Release updates the visible release information without editing the website source.
 
 ## Site structure
 
-- Hero: product positioning and primary release link
-- Downloads: installer, portable binaries, and legacy .NET Framework edition
-- Documentation: four-step quick start plus project and issue links
-- Screenshots: interface-oriented product previews and key capabilities
-- Version history: official published releases
-- Future licensing: reserved section for optional commercial or enterprise offers
+- Product overview and primary latest-release link
+- Installer and portable download cards populated from GitHub Releases
+- Documentation and workflow guide
+- Product screenshots and Office-specific previews
+- Version history populated from GitHub Releases
+- GitHub Issues feedback and support links
 
-All distribution links point to the canonical GitHub repository at `fernand21/ribbon-ui-studio`.
+All distribution links point to the canonical repository at `fernand21/ribbon-ui-studio`.
 
 ## Software status
 
-The source code in this repository belongs to the distribution website. Publishing this website does not publish or grant rights to the Ribbon UI Studio application source code. Application binaries will be distributed separately through GitHub Releases.
+This repository contains the distribution website only. Publishing this website does not publish or grant rights to the Ribbon UI Studio application source code. Application binaries are distributed separately through GitHub Releases.
 
 ## Local development
 
@@ -46,10 +37,16 @@ npm run dev
 npm run build
 ```
 
-The project uses vinext and is published automatically through GitHub Pages.
+The project uses vinext and is deployed automatically through GitHub Pages.
 
+## Branding and URL migration
 
-## Branding transition
+The product is branded **Ribbon UI Studio** and the canonical GitHub Pages URL is:
 
-The product is now branded **Ribbon UI Studio**. The GitHub repository slug and GitHub Pages path intentionally remain `ribbon-ui-studio` for now so links already published in videos and descriptions continue to work.
+`https://fernand21.github.io/ribbon-ui-studio/`
 
+The previous project path was:
+
+`https://fernand21.github.io/office-ribbon-editor/`
+
+The manifest, sitemap, canonical metadata, repository links, and GitHub Pages base path now use the new `ribbon-ui-studio` path.

@@ -1,0 +1,95 @@
+name: Preserve historical download counts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/fix-download-history.yml
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preserve removed asset downloads
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("app/page.tsx")
+          text = path.read_text(encoding="utf-8")
+
+          anchor = 'const isInstallerAsset = (asset:ReleaseAsset) => /\\.exe$/i.test(asset.name) && !/portable/i.test(asset.name);\n'
+          addition = anchor + '\n// Downloads from release assets that were replaced/removed and are no longer returned by the GitHub API.\n// The previous v3.0.0 portable EXE had 2 downloads before it was replaced.\nconst historicalRemovedDownloads = { installer: 0, portable: 2 };\n'
+          if 'const historicalRemovedDownloads' not in text:
+              if anchor not in text:
+                  raise SystemExit('Could not find asset classifier anchor')
+              text = text.replace(anchor, addition, 1)
+
+          old = '''        setDownloadStats({
+          total: installerTotal + portableTotal,
+          installer: installerTotal,
+          portable: portableTotal,
+          loaded:true,
+        });'''
+          new = '''        setDownloadStats({
+          total: installerTotal + portableTotal + historicalRemovedDownloads.installer + historicalRemovedDownloads.portable,
+          installer: installerTotal + historicalRemovedDownloads.installer,
+          portable: portableTotal + historicalRemovedDownloads.portable,
+          loaded:true,
+        });'''
+          if old not in text:
+              raise SystemExit('Could not find download stats block')
+          text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding="utf-8")
+
+      - name: Remove one-time workflow
+        run: git rm .github/workflows/fix-download-history.yml
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate production build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: /ribbon-ui-studio
+
+      - name: Commit corrected historical total
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/page.tsx .github/workflows/fix-download-history.yml
+          git commit -m "Preserve historical download counts"
+          git push
+
+      - name: Export GitHub Pages
+        run: node scripts/export-pages.mjs
+        env:
+          NEXT_PUBLIC_BASE_PATH: /ribbon-ui-studio
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages-dist
+      - name: Deploy corrected site
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -3,9 +3,11 @@
 Se agregó un contador público de descargas basado en la API de GitHub Releases del repositorio `fernand21/ribbon-ui-studio`.
 
 Cambios principales:
-- Total acumulado de descargas de assets `.exe` y `.zip` de releases publicadas.
-- Conteo de descargas del instalador `.exe` de la release estable más reciente.
-- Conteo de descargas del paquete `.zip` de la release estable más reciente.
+- Total acumulado de descargas de los assets oficiales de releases publicadas.
+- Los instaladores se identifican como archivos `.exe` que no contienen `portable` en el nombre.
+- El portable actual se identifica como `Ribbon.UI.Studio_Portable.exe`.
+- Los antiguos paquetes `.zip` portables siguen sumando al historial para no perder las descargas de versiones anteriores.
+- El EXE portable ya no se suma al contador de instaladores.
 - Los contadores se ocultan si la API de GitHub no está disponible, sin bloquear la página.
 - Textos localizados para el indicador de descargas.
 

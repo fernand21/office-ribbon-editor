@@ -1,0 +1,112 @@
+name: Repair website layout
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/repair-page.yml
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore compatible page and apply portable EXE changes
+        shell: python
+        run: |
+          import subprocess
+          from pathlib import Path
+
+          # Restore the page that matches the current stylesheet.
+          subprocess.run([
+              "git", "checkout", "01c953f1e8271689094054d46a49ae9ac3dd8c1d", "--", "app/page.tsx"
+          ], check=True)
+
+          path = Path("app/page.tsx")
+          text = path.read_text(encoding="utf-8")
+
+          def replace_once(old, new):
+              global text
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"Expected exactly one match, got {count}: {old[:120]}")
+              text = text.replace(old, new, 1)
+
+          replace_once(
+              'type DownloadStats = { total:number; installer:number; portable:number; loaded:boolean };\n\nconst downloadsWord',
+              'type DownloadStats = { total:number; installer:number; portable:number; loaded:boolean };\n\nconst isPortableAsset = (asset:ReleaseAsset) => /\\.zip$/i.test(asset.name) || (/portable/i.test(asset.name) && /\\.exe$/i.test(asset.name));\nconst isInstallerAsset = (asset:ReleaseAsset) => /\\.exe$/i.test(asset.name) && !/portable/i.test(asset.name);\n\nconst downloadsWord'
+          )
+
+          portable_copies = {
+              'portableCopy:"Extract and run without installation. Ideal for USB toolkits or keeping the application in a project folder."': 'portableCopy:"Run directly without installation. A single portable EXE, ideal for USB toolkits or project folders."',
+              'portableCopy:"Descomprime y ejecuta sin instalar. Ideal para memorias USB o carpetas de proyecto."': 'portableCopy:"Ejecuta directamente sin instalación. Un único EXE portátil, ideal para memorias USB o carpetas de proyecto."',
+              'portableCopy:"Extraia e execute sem instalação. Ideal para USB ou pastas de projeto."': 'portableCopy:"Execute diretamente sem instalação. Um único EXE portátil, ideal para USB ou pastas de projeto."',
+              'portableCopy:"Extrayez et exécutez sans installation, depuis une clé USB ou un dossier de projet."': 'portableCopy:"Exécutez directement sans installation. Un seul EXE portable, idéal pour une clé USB ou un dossier de projet."',
+              'portableCopy:"Ohne Installation entpacken und starten. Ideal für USB oder Projektordner."': 'portableCopy:"Direkt ohne Installation starten. Eine einzelne portable EXE, ideal für USB-Sticks oder Projektordner."',
+              'portableCopy:"Estrai ed esegui senza installazione, anche da USB."': 'portableCopy:"Esegui direttamente senza installazione. Un unico EXE portatile, ideale per USB o cartelle di progetto."',
+              'portableCopy:"Распакуйте и запускайте без установки, в том числе с USB."': 'portableCopy:"Запускайте напрямую без установки. Один портативный EXE-файл, удобный для USB-накопителей и папок проектов."',
+              'portableCopy:"解压后无需安装即可运行，适合 U 盘或项目文件夹。"': 'portableCopy:"无需安装即可直接运行。单个便携 EXE，适合 U 盘或项目文件夹。"',
+              'portableCopy:"インストール不要で展開して実行。USBやプロジェクトフォルダーに最適です。"': 'portableCopy:"インストール不要で直接実行できます。単一のポータブルEXEで、USBやプロジェクトフォルダーに最適です。"',
+              'portableCopy:"बिना इंस्टॉल किए निकालें और चलाएँ। USB या प्रोजेक्ट फ़ोल्डर के लिए उपयुक्त।"': 'portableCopy:"बिना इंस्टॉल किए सीधे चलाएँ। एकल पोर्टेबल EXE, USB या प्रोजेक्ट फ़ोल्डर के लिए उपयुक्त।"',
+          }
+          for old, new in portable_copies.items():
+              replace_once(old, new)
+
+          replace_once(
+              '  const installerAsset = currentRelease?.assets.find((asset) => /\\.exe$/i.test(asset.name));\n  const portableAsset = currentRelease?.assets.find((asset) => /\\.zip$/i.test(asset.name));',
+              '  const installerAsset = currentRelease?.assets.find(isInstallerAsset);\n  const portableAsset = currentRelease?.assets.find(isPortableAsset);'
+          )
+          replace_once('          .filter((asset) => /\\.exe$/i.test(asset.name))', '          .filter(isInstallerAsset)')
+          replace_once('          .filter((asset) => /\\.zip$/i.test(asset.name))', '          .filter(isPortableAsset)')
+
+          replace_once('<article className="download-card portable-card"><div className="card-icon">ZIP</div>', '<article className="download-card portable-card"><div className="card-icon">EXE</div>')
+          replace_once('portableAsset?.name || "Latest portable ZIP"', 'portableAsset?.name || "Latest portable EXE"')
+          replace_once('lang === "es" ? "Total histórico de paquetes ZIP en todas las versiones" : "Historical ZIP package downloads across all releases"', 'lang === "es" ? "Total histórico de descargas portátiles en todas las versiones" : "Historical portable downloads across all releases"')
+          replace_once('lang === "es" ? "Total histórico de instaladores EXE en todas las versiones" : "Historical EXE installer downloads across all releases"', 'lang === "es" ? "Total histórico de descargas del instalador en todas las versiones" : "Historical installer downloads across all releases"')
+
+          # Current documentation: portable is now a single EXE, not a ZIP.
+          replace_once('Instala el programa o utiliza el ZIP portátil.', 'Instala el programa o utiliza el EXE portátil.')
+          replace_once('Install the application or use the portable ZIP.', 'Install the application or use the portable EXE.')
+
+          # Sanity checks: the restored page must match the existing CSS and reveal animation.
+          required = [
+              '<header className="site-header">',
+              'className="brand-glyph"',
+              'entry.target.classList.add("is-visible")',
+              'currentRelease?.assets.find(isPortableAsset)',
+              '.filter(isPortableAsset)',
+              'className="card-icon">EXE</div>',
+              'Latest portable EXE',
+          ]
+          for marker in required:
+              if marker not in text:
+                  raise SystemExit(f"Missing expected marker: {marker}")
+
+          if 'entry.target.classList.add("revealed")' in text:
+              raise SystemExit('Incorrect reveal class still present')
+
+          path.write_text(text, encoding="utf-8")
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate production build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: /ribbon-ui-studio
+
+      - name: Commit repair
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/repair-page.yml
+          git add app/page.tsx
+          git diff --cached --check
+          git commit -m "Restore website layout and portable EXE support"
+          git push

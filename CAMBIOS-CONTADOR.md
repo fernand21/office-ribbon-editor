@@ -8,6 +8,8 @@ Cambios principales:
 - El portable actual se identifica como `Ribbon.UI.Studio_Portable.exe`.
 - Los antiguos paquetes `.zip` portables siguen sumando al historial para no perder las descargas de versiones anteriores.
 - El EXE portable ya no se suma al contador de instaladores.
+- Se conservan 2 descargas históricas del Portable v3.0.0 anterior que GitHub dejó de exponer al eliminar y volver a subir ese asset.
+- El total mostrado combina las descargas actuales de la API con ese histórico conocido, evitando que el contador retroceda por reemplazar un asset.
 - Los contadores se ocultan si la API de GitHub no está disponible, sin bloquear la página.
 - Textos localizados para el indicador de descargas.
 

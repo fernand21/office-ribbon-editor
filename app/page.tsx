@@ -21,6 +21,10 @@ type DownloadStats = { total:number; installer:number; portable:number; loaded:b
 const isPortableAsset = (asset:ReleaseAsset) => /\.zip$/i.test(asset.name) || (/portable/i.test(asset.name) && /\.exe$/i.test(asset.name));
 const isInstallerAsset = (asset:ReleaseAsset) => /\.exe$/i.test(asset.name) && !/portable/i.test(asset.name);
 
+// Downloads from release assets that were replaced/removed and are no longer returned by the GitHub API.
+// The previous v3.0.0 portable EXE had 2 downloads before it was replaced.
+const historicalRemovedDownloads = { installer: 0, portable: 2 };
+
 const downloadsWord: Record<Lang, string> = {
   en:"downloads", es:"descargas", pt:"downloads", fr:"téléchargements", de:"Downloads",
   it:"download", ru:"скачиваний", zh:"次下载", ja:"ダウンロード", hi:"डाउनलोड",
@@ -136,9 +140,9 @@ export default function Home() {
           .filter(isPortableAsset)
           .reduce((assetTotal, asset) => assetTotal + (asset.download_count || 0), 0), 0);
         setDownloadStats({
-          total: installerTotal + portableTotal,
-          installer: installerTotal,
-          portable: portableTotal,
+          total: installerTotal + portableTotal + historicalRemovedDownloads.installer + historicalRemovedDownloads.portable,
+          installer: installerTotal + historicalRemovedDownloads.installer,
+          portable: portableTotal + historicalRemovedDownloads.portable,
           loaded:true,
         });
       })

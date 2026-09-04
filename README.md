@@ -1,21 +1,52 @@
 # Ribbon UI Studio
 
-Design and edit custom Microsoft Office ribbons with RibbonX and VBA in one platform, then package add-ins with Windows installers.
+**Free RibbonX and Microsoft Office Custom UI editor for Windows.**
+
+Ribbon UI Studio helps developers design and edit custom Microsoft Office ribbons with RibbonX/customUI XML and VBA in one workspace. It supports Excel, Word and PowerPoint add-ins, VBA callback generation and diagnostics, imageMso browsing, Office-aware previews, and Windows installer packaging.
+
+It is especially useful if you are searching for a modern workflow around terms such as **RibbonX editor**, **Office Ribbon Editor**, **Custom UI Editor alternative**, **Ribbon XML editor**, **Excel Ribbon Designer**, **VBA Ribbon Editor**, **Office Add-in Creator**, or **imageMso Browser**.
 
 ## Website
 
-Official distribution website for Ribbon UI Studio. The application is proprietary software: it is free to download and use, while its application source code remains private.
+Official site and free downloads:
 
-Website: https://fernand21.github.io/ribbon-ui-studio/
+https://fernand21.github.io/ribbon-ui-studio/
 
-The website reads the current public version, release date, asset names, asset sizes, download links, and download counters directly from GitHub Releases. Publishing a new GitHub Release updates the visible release information without editing the website source.
+The application is proprietary software distributed free of charge. The application source code remains private; this repository contains the public website and release/distribution resources.
+
+## Main capabilities
+
+- Edit RibbonX / `customUI` XML for Microsoft Office
+- Create and maintain Excel `.xlam`, Word `.dotm` and PowerPoint `.ppam` add-ins
+- Generate VBA callback signatures required by RibbonX controls
+- Diagnose missing callbacks, duplicate IDs and invalid RibbonX structures
+- Browse built-in Office `imageMso` icons and manage custom images
+- Preview Office-specific ribbon layouts
+- Read and edit VBA modules from supported Office files
+- Package add-ins with Windows installers
+- Use installer or portable builds of Ribbon UI Studio
+
+## Downloads and releases
+
+The website reads the current public version, release date, asset names, asset sizes, direct download links and download counters directly from GitHub Releases. Publishing a new public GitHub Release updates the visible release information without manually editing the download page.
+
+Releases:
+https://github.com/fernand21/ribbon-ui-studio/releases
+
+## Discovery pages
+
+- RibbonX Editor: https://fernand21.github.io/ribbon-ui-studio/ribbonx-editor/
+- Custom UI Editor alternative: https://fernand21.github.io/ribbon-ui-studio/custom-ui-editor-alternative/
+- Excel Ribbon Designer: https://fernand21.github.io/ribbon-ui-studio/excel-ribbon-designer/
+- Office Add-in Creator: https://fernand21.github.io/ribbon-ui-studio/office-addin-creator/
+- imageMso Browser: https://fernand21.github.io/ribbon-ui-studio/imagemso-browser/
 
 ## Site structure
 
-- Product overview and primary latest-release link
+- Product overview and latest-release download
 - Installer and portable download cards populated from GitHub Releases
-- Documentation and workflow guide
-- Product screenshots and Office-specific previews
+- Documentation and complete workflow guide
+- Real product screenshots and Office-specific previews
 - Version history populated from GitHub Releases
 - GitHub Issues feedback and support links
 
@@ -49,4 +80,4 @@ The previous project path was:
 
 `https://fernand21.github.io/office-ribbon-editor/`
 
-The manifest, sitemap, canonical metadata, repository links, and GitHub Pages base path now use the new `ribbon-ui-studio` path.
+The manifest, sitemap, canonical metadata, repository links and GitHub Pages base path use the current `ribbon-ui-studio` path.

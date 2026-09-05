@@ -46,7 +46,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const publicBase = process.env.GITHUB_ACTIONS === "true" ? "/ribbon-ui-studio" : "";
   const structuredData = { "@context":"https://schema.org", "@graph":[
     {
       "@type":"WebSite",
@@ -73,18 +72,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         "VBA callback generation and diagnostics",
         "imageMso icon browsing",
         "Office-aware ribbon previews",
-        "Multilingual interface",
         "Windows installer packaging for add-ins"
       ],
       softwareRequirements:"Microsoft Office desktop; Inno Setup 6 is required only to generate add-in installers."
     }
   ]};
-  return <html lang="en">
-    <head><link rel="stylesheet" href={`${publicBase}/community-reviews.css`} /></head>
-    <body className={`${geistSans.variable} ${geistMono.variable}`}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(structuredData).replace(/</g,"\\u003c")}} />
-      {children}
-      <script defer src={`${publicBase}/community-reviews.js`}></script>
-    </body>
-  </html>;
+  return <html lang="en"><body className={`${geistSans.variable} ${geistMono.variable}`}><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(structuredData).replace(/</g,"\\u003c")}} />{children}</body></html>;
 }

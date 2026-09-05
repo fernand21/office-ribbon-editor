@@ -1,0 +1,78 @@
+name: "⭐ Rate Ribbon UI Studio / Califica Ribbon UI Studio"
+description: "Share a public experience and a 1–5 star rating / Comparte una experiencia pública y una calificación de 1 a 5 estrellas"
+title: "[Experience] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for trying Ribbon UI Studio. Your review will be public on GitHub and may appear on the official website.
+
+        Gracias por probar Ribbon UI Studio. Tu opinión será pública en GitHub y podrá aparecer en la web oficial.
+
+  - type: dropdown
+    id: rating
+    attributes:
+      label: "Rating / Calificación"
+      description: "How would you rate your overall experience? / ¿Cómo calificas tu experiencia general?"
+      options:
+        - "★★★★★ (5/5)"
+        - "★★★★☆ (4/5)"
+        - "★★★☆☆ (3/5)"
+        - "★★☆☆☆ (2/5)"
+        - "★☆☆☆☆ (1/5)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: office-app
+    attributes:
+      label: "Office app / Aplicación de Office"
+      options:
+        - "Excel"
+        - "Word"
+        - "PowerPoint"
+        - "More than one / Más de una"
+        - "Other / Otra"
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: "What did you build? / ¿Qué creaste?"
+      description: "Tell us briefly what you used Ribbon UI Studio for. / Cuéntanos brevemente para qué utilizaste Ribbon UI Studio."
+      placeholder: "Example: an Excel .xlam add-in with a custom RibbonX tab..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: experience
+    attributes:
+      label: "Your experience / Tu experiencia"
+      description: "What worked well? What saved you time? / ¿Qué funcionó bien? ¿Qué te ahorró tiempo?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: improve
+    attributes:
+      label: "What should improve? / ¿Qué debería mejorar?"
+      description: "Suggestions and criticism are welcome. / Las sugerencias y críticas son bienvenidas."
+    validations:
+      required: false
+
+  - type: input
+    id: environment
+    attributes:
+      label: "Windows and Office version / Versión de Windows y Office"
+      placeholder: "Windows 11 · Microsoft 365 64-bit"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: public-review
+    attributes:
+      label: "Public review / Opinión pública"
+      options:
+        - label: "I understand that this review is public and may be displayed on the Ribbon UI Studio website. / Entiendo que esta opinión es pública y puede mostrarse en la web de Ribbon UI Studio."
+          required: true
